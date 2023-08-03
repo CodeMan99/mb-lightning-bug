@@ -7,8 +7,23 @@ enum Walls {
     Four = 16,
 }
 
-let mapTickCount: number = 0
+const MIN_ACCELERATION: number = -1023.0
+const MAX_ACCELERATION: number = 1023.0
+
+// byteWidth = 4; length = 20
+const pointSound = new music.StringArrayPlayable(["E5"], 200)
+const endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
+const accelerationHistory: Buffer = pins.createBuffer(80)
 const wallMap: Buffer = pins.createBuffer(128)
+const startY: number = input.acceleration(Dimension.Y)
+
+let mapTickCount: number = 0
+let isGameOver: boolean = false
+let score: number = 0
+
+for (let i = 0; i < 80; i += 4) {
+    accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
+}
 
 wallMap.setUint8(2, Walls.Zero)
 wallMap.setUint8(4, Walls.Four)
@@ -59,22 +74,6 @@ wallMap.setUint8(121, Walls.Zero)
 wallMap.setUint8(122, Walls.Four)
 wallMap.setUint8(124, Walls.One | Walls.Two)
 wallMap.setUint8(126, Walls.Three | Walls.Four)
-
-const MIN_ACCELERATION: number = -1023.0
-const MAX_ACCELERATION: number = 1023.0
-// byteWidth = 4; length = 20
-const accelerationHistory: Buffer = pins.createBuffer(80)
-const startY: number = input.acceleration(Dimension.Y)
-
-for (let i = 0; i < 80; i += 4) {
-    accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
-}
-
-// let bugFlashRate: number = 80
-let isGameOver: boolean = false
-let score: number = 0
-const pointSound = new music.StringArrayPlayable(["E5"], 200)
-const endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
 
 input.setAccelerometerRange(AcceleratorRange.OneG)
 music.setBuiltInSpeakerEnabled(true)
