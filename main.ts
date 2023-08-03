@@ -134,6 +134,7 @@ basic.forever(() => {
             basic.showString(`Game Over - Score ${score}`, 60)
         }
 
+        basic.showNumber(score, 120)
         isGameOver = true
     } else {
         displayWalls(0, currentWall)
