@@ -1,10 +1,11 @@
 enum Walls {
-    None = 0,
-    Zero = 1,
-    One = 2,
-    Two = 4,
-    Three = 8,
-    Four = 16,
+    None  = 0b00000,
+    Zero  = 0b00001,
+    One   = 0b00010,
+    Two   = 0b00100,
+    Three = 0b01000,
+    Four  = 0b10000,
+    All   = 0b11111,
 }
 
 const MIN_ACCELERATION: number = -1023.0
@@ -37,7 +38,7 @@ wallMap.setUint8(27, Walls.One)
 wallMap.setUint8(28, Walls.Four)
 wallMap.setUint8(29, Walls.Zero)
 wallMap.setUint8(30, Walls.Two)
-wallMap.setUint8(33, Walls.Zero | Walls.One | Walls.Two | Walls.Four)
+wallMap.setUint8(33, Walls.All ^ Walls.Three)
 wallMap.setUint8(37, Walls.One | Walls.Two | Walls.Three)
 wallMap.setUint8(40, Walls.Zero | Walls.Four)
 wallMap.setUint8(42, Walls.One | Walls.Three)
@@ -57,7 +58,7 @@ wallMap.setUint8(79, Walls.One)
 wallMap.setUint8(80, Walls.Four)
 wallMap.setUint8(81, Walls.Zero)
 wallMap.setUint8(82, Walls.Two)
-wallMap.setUint8(85, Walls.Zero | Walls.One | Walls.Two | Walls.Four)
+wallMap.setUint8(85, Walls.All ^ Walls.Three)
 wallMap.setUint8(89, Walls.One | Walls.Two | Walls.Three)
 wallMap.setUint8(92, Walls.Zero | Walls.Four)
 wallMap.setUint8(94, Walls.One | Walls.Three)
