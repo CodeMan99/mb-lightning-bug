@@ -18,9 +18,20 @@ const accelerationHistory: Buffer = pins.createBuffer(80)
 const wallMap: Buffer = pins.createBuffer(128)
 const startY: number = input.acceleration(Dimension.Y)
 
-let mapTickCount: number = 0
 let isGameOver: boolean = false
+let showHighScore: boolean = false
+let doResetGame: boolean = false
+let mapTickCount: number = 0
+let highScore: number = 0
 let score: number = 0
+
+function resetGame() {
+    isGameOver = false
+    showHighScore = false
+    doResetGame = false
+    mapTickCount = 0
+    score = 0
+}
 
 for (let i = 0; i < 80; i += 4) {
     accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
@@ -133,10 +144,21 @@ basic.forever(() => {
         if (isGameOver === false) {
             music.play(endGameSound, music.PlaybackMode.InBackground)
             basic.showString(`Game Over - Score ${score}`, 60)
+            highScore = Math.max(score, highScore)
         }
 
-        basic.showNumber(score, 120)
+        if (showHighScore) {
+            basic.showString(`High Score ${highScore}`, 60)
+            showHighScore = false
+        } else {
+            basic.showNumber(score, 120)
+        }
+
         isGameOver = true
+
+        if (doResetGame) {
+            resetGame()
+        }
     } else {
         displayWalls(0, currentWall)
         displayWalls(1, wallMap.getUint8(xMapOffsetStart + 1))
@@ -163,3 +185,11 @@ function displayWalls(xOffset: number, wallColumn: Walls): void {
     ;(wallColumn & Walls.Three) === Walls.Three && led.plot(xOffset, 3)
     ;(wallColumn & Walls.Four) === Walls.Four && led.plot(xOffset, 4)
 }
+
+input.onButtonPressed(Button.B, () => {
+    doResetGame = isGameOver && true
+})
+
+input.onButtonPressed(Button.A, () => {
+    showHighScore = isGameOver && true
+})
