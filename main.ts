@@ -71,9 +71,13 @@ for (let i = 0; i < 80; i += 4) {
 }
 
 // let bugFlashRate: number = 80
-let isGameOver = false
+let isGameOver: boolean = false
+let score: number = 0
+let pointSound = new music.StringArrayPlayable(["E5"], 200)
+let endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
 
 input.setAccelerometerRange(AcceleratorRange.OneG)
+music.setBuiltInSpeakerEnabled(true)
 
 basic.forever(() => {
     let vertical: number = input.acceleration(Dimension.Y)
@@ -118,10 +122,19 @@ basic.forever(() => {
             (currentWall & collisionY) > 0
         )
 
+    if (currentWall !== Walls.None && currentWallFrame === 11) {
+        score += 1
+        music.play(pointSound, music.PlaybackMode.InBackground)
+    }
+
     led.stopAnimation()
 
     if (gameOver) {
-        led.plotAll()
+        if (isGameOver === false) {
+            music.play(endGameSound, music.PlaybackMode.InBackground)
+            basic.showString(`Game Over - Score ${score}`, 60)
+        }
+
         isGameOver = true
     } else {
         displayWalls(0, currentWall)
