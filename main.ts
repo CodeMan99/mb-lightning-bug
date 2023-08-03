@@ -8,7 +8,7 @@ enum Walls {
 }
 
 let mapTickCount: number = 0
-let wallMap: Buffer = pins.createBuffer(128)
+const wallMap: Buffer = pins.createBuffer(128)
 
 wallMap.setUint8(2, Walls.Zero)
 wallMap.setUint8(4, Walls.Four)
@@ -60,11 +60,11 @@ wallMap.setUint8(122, Walls.Four)
 wallMap.setUint8(124, Walls.One | Walls.Two)
 wallMap.setUint8(126, Walls.Three | Walls.Four)
 
-let minAcceleration: number = -1023.0
-let maxAcceleration: number = 1023.0
+const MIN_ACCELERATION: number = -1023.0
+const MAX_ACCELERATION: number = 1023.0
 // byteWidth = 4; length = 20
-let accelerationHistory: Buffer = pins.createBuffer(80)
-let startY: number = input.acceleration(Dimension.Y)
+const accelerationHistory: Buffer = pins.createBuffer(80)
+const startY: number = input.acceleration(Dimension.Y)
 
 for (let i = 0; i < 80; i += 4) {
     accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
@@ -73,19 +73,19 @@ for (let i = 0; i < 80; i += 4) {
 // let bugFlashRate: number = 80
 let isGameOver: boolean = false
 let score: number = 0
-let pointSound = new music.StringArrayPlayable(["E5"], 200)
-let endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
+const pointSound = new music.StringArrayPlayable(["E5"], 200)
+const endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
 
 input.setAccelerometerRange(AcceleratorRange.OneG)
 music.setBuiltInSpeakerEnabled(true)
 
 basic.forever(() => {
-    let vertical: number = input.acceleration(Dimension.Y)
+    const vertical: number = input.acceleration(Dimension.Y)
 
     accelerationHistory.shift(4)
     accelerationHistory.setNumber(NumberFormat.Int32LE, 76, vertical)
 
-    let sum: number =
+    const sum: number =
         accelerationHistory.getNumber(NumberFormat.Int32LE,  0) +
         accelerationHistory.getNumber(NumberFormat.Int32LE,  4) +
         accelerationHistory.getNumber(NumberFormat.Int32LE,  8) +
@@ -107,15 +107,15 @@ basic.forever(() => {
         accelerationHistory.getNumber(NumberFormat.Int32LE, 72) +
         vertical
 
-    let averageAcceration: number = Math.constrain(sum * 0.05, minAcceleration, maxAcceleration)
-    let ledY: number = Math.round(Math.map(averageAcceration, minAcceleration, maxAcceleration, -0.5, 4.49))
-    let collisionY: number = Math.pow(2, ledY)
+    const averageAcceration: number = Math.constrain(sum * 0.05, MIN_ACCELERATION, MAX_ACCELERATION)
+    const ledY: number = Math.round(Math.map(averageAcceration, MIN_ACCELERATION, MAX_ACCELERATION, -0.5, 4.49))
+    const collisionY: number = Math.pow(2, ledY)
     // advance the map once every twelve frames
-    let xMapOffsetStart: number = Math.floor(mapTickCount / 12)
-    let currentWall: number = wallMap.getUint8(xMapOffsetStart)
-    let currentWallFrame: number = mapTickCount % 12
+    const xMapOffsetStart: number = Math.floor(mapTickCount / 12)
+    const currentWall: number = wallMap.getUint8(xMapOffsetStart)
+    const currentWallFrame: number = mapTickCount % 12
     // Allow mistakes! Ignore collision if the first or last frame of the currentWall.
-    let gameOver: boolean =
+    const gameOver: boolean =
         isGameOver || (
             0 < currentWallFrame &&
             currentWallFrame < 11 &&
