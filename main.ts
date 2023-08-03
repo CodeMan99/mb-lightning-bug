@@ -1,5 +1,67 @@
-let minAcceleration = -1023.0
-let maxAcceleration = 1023.0
+enum Walls {
+    None = 0,
+    Zero = 1,
+    One = 2,
+    Two = 4,
+    Three = 8,
+    Four = 16,
+}
+
+let mapTickCount: number = 0
+let wallMap: Buffer = pins.createBuffer(128)
+
+wallMap.setUint8(2, Walls.Zero)
+wallMap.setUint8(4, Walls.Four)
+wallMap.setUint8(7, Walls.Two | Walls.Three)
+wallMap.setUint8(11, Walls.Zero | Walls.Three | Walls.Four)
+wallMap.setUint8(13, Walls.Two)
+wallMap.setUint8(16, Walls.Zero | Walls.One | Walls.Two)
+wallMap.setUint8(20, Walls.Two | Walls.Three | Walls.Four)
+wallMap.setUint8(23, Walls.One | Walls.Three)
+wallMap.setUint8(27, Walls.One)
+wallMap.setUint8(28, Walls.Four)
+wallMap.setUint8(29, Walls.Zero)
+wallMap.setUint8(30, Walls.Two)
+wallMap.setUint8(33, Walls.Zero | Walls.One | Walls.Two | Walls.Four)
+wallMap.setUint8(37, Walls.One | Walls.Two | Walls.Three)
+wallMap.setUint8(40, Walls.Zero | Walls.Four)
+wallMap.setUint8(42, Walls.One | Walls.Three)
+wallMap.setUint8(44, Walls.One | Walls.Three)
+wallMap.setUint8(48, Walls.Zero | Walls.One | Walls.Three)
+wallMap.setUint8(52, Walls.One | Walls.Two | Walls.Four)
+
+wallMap.setUint8(54, Walls.Zero)
+wallMap.setUint8(56, Walls.Four)
+wallMap.setUint8(59, Walls.Two | Walls.Three)
+wallMap.setUint8(63, Walls.Zero | Walls.Three | Walls.Four)
+wallMap.setUint8(65, Walls.Two)
+wallMap.setUint8(68, Walls.Zero | Walls.One | Walls.Two)
+wallMap.setUint8(72, Walls.Two | Walls.Three | Walls.Four)
+wallMap.setUint8(75, Walls.One | Walls.Three)
+wallMap.setUint8(79, Walls.One)
+wallMap.setUint8(80, Walls.Four)
+wallMap.setUint8(81, Walls.Zero)
+wallMap.setUint8(82, Walls.Two)
+wallMap.setUint8(85, Walls.Zero | Walls.One | Walls.Two | Walls.Four)
+wallMap.setUint8(89, Walls.One | Walls.Two | Walls.Three)
+wallMap.setUint8(92, Walls.Zero | Walls.Four)
+wallMap.setUint8(94, Walls.One | Walls.Three)
+wallMap.setUint8(96, Walls.One | Walls.Three)
+wallMap.setUint8(100, Walls.Zero | Walls.One | Walls.Three)
+wallMap.setUint8(104, Walls.One | Walls.Two | Walls.Four)
+
+wallMap.setUint8(107, Walls.Two | Walls.Three)
+wallMap.setUint8(111, Walls.Zero | Walls.One | Walls.Four)
+wallMap.setUint8(113, Walls.Four)
+wallMap.setUint8(115, Walls.Two)
+wallMap.setUint8(118, Walls.One | Walls.Two | Walls.Three)
+wallMap.setUint8(121, Walls.Zero)
+wallMap.setUint8(122, Walls.Four)
+wallMap.setUint8(124, Walls.One | Walls.Two)
+wallMap.setUint8(126, Walls.Three | Walls.Four)
+
+let minAcceleration: number = -1023.0
+let maxAcceleration: number = 1023.0
 // byteWidth = 4; length = 20
 let accelerationHistory: Buffer = pins.createBuffer(80)
 let startY: number = input.acceleration(Dimension.Y)
@@ -8,8 +70,8 @@ for (let i = 0; i < 80; i += 4) {
     accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
 }
 
-// let bugFlashRate: number = 120
-// let screen: Image = led.screenshot()
+// let bugFlashRate: number = 80
+let isGameOver = false
 
 input.setAccelerometerRange(AcceleratorRange.OneG)
 
@@ -41,15 +103,49 @@ basic.forever(() => {
         accelerationHistory.getNumber(NumberFormat.Int32LE, 72) +
         vertical
 
-    let averageAcceration: number = Math.constrain(sum * -0.05, minAcceleration, maxAcceleration)
+    let averageAcceration: number = Math.constrain(sum * 0.05, minAcceleration, maxAcceleration)
     let ledY: number = Math.round(Math.map(averageAcceration, minAcceleration, maxAcceleration, -0.5, 4.49))
+    let collisionY: number = Math.pow(2, ledY)
+    // advance the map once every twelve frames
+    let xMapOffsetStart: number = Math.floor(mapTickCount / 12)
+    let currentWall: number = wallMap.getUint8(xMapOffsetStart)
+    let currentWallFrame: number = mapTickCount % 12
+    // Allow mistakes! Ignore collision if the first or last frame of the currentWall.
+    let gameOver: boolean =
+        isGameOver || (
+            0 < currentWallFrame &&
+            currentWallFrame < 11 &&
+            (currentWall & collisionY) > 0
+        )
 
     led.stopAnimation()
-    led.plot(0, 4 - ledY)
 
-    // 1000 / 8 = roughly 125 samples per second
+    if (gameOver) {
+        led.plotAll()
+        isGameOver = true
+    } else {
+        displayWalls(0, currentWall)
+        displayWalls(1, wallMap.getUint8(xMapOffsetStart + 1))
+        displayWalls(2, wallMap.getUint8(xMapOffsetStart + 2))
+        displayWalls(3, wallMap.getUint8(xMapOffsetStart + 3))
+        displayWalls(4, wallMap.getUint8(xMapOffsetStart + 4))
+        led.plot(0, ledY)
+
+        // 128 (wallMap.length) * 12 = 1536
+        mapTickCount = (mapTickCount + 1) % 1536
+    }
+
+    // 1000 / 8 = roughly 125 frames per second
     // 125 / 20 = new history 6.25 times per second
     // 1000 / 6.25 = roughly 160 milliseconds per move
     // 160 * 4 = roughly 640 milliseconds to "fall" from top to bottom
     basic.pause(8)
 })
+
+function displayWalls(xOffset: number, wallColumn: Walls): void {
+    ;(wallColumn & Walls.Zero) === Walls.Zero && led.plot(xOffset, 0)
+    ;(wallColumn & Walls.One) === Walls.One && led.plot(xOffset, 1)
+    ;(wallColumn & Walls.Two) === Walls.Two && led.plot(xOffset, 2)
+    ;(wallColumn & Walls.Three) === Walls.Three && led.plot(xOffset, 3)
+    ;(wallColumn & Walls.Four) === Walls.Four && led.plot(xOffset, 4)
+}
