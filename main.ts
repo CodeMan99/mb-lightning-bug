@@ -1,11 +1,11 @@
 enum Walls {
-    None  = 0b00000,
-    Zero  = 0b00001,
-    One   = 0b00010,
-    Two   = 0b00100,
-    Three = 0b01000,
-    Four  = 0b10000,
-    All   = 0b11111,
+    None = 0b00000,
+    Y0   = 0b00001,
+    Y1   = 0b00010,
+    Y2   = 0b00100,
+    Y3   = 0b01000,
+    Y4   = 0b10000,
+    All  = 0b11111,
 }
 
 const MIN_ACCELERATION: number = -1023.0
@@ -37,55 +37,55 @@ for (let i = 0; i < 80; i += 4) {
     accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
 }
 
-wallMap.setUint8(2, Walls.Zero)
-wallMap.setUint8(4, Walls.Four)
-wallMap.setUint8(7, Walls.Two | Walls.Three)
-wallMap.setUint8(11, Walls.Zero | Walls.Three | Walls.Four)
-wallMap.setUint8(13, Walls.Two)
-wallMap.setUint8(16, Walls.Zero | Walls.One | Walls.Two)
-wallMap.setUint8(20, Walls.Two | Walls.Three | Walls.Four)
-wallMap.setUint8(23, Walls.One | Walls.Three)
-wallMap.setUint8(27, Walls.One)
-wallMap.setUint8(28, Walls.Four)
-wallMap.setUint8(29, Walls.Zero)
-wallMap.setUint8(30, Walls.Two)
-wallMap.setUint8(33, Walls.All ^ Walls.Three)
-wallMap.setUint8(37, Walls.One | Walls.Two | Walls.Three)
-wallMap.setUint8(40, Walls.Zero | Walls.Four)
-wallMap.setUint8(42, Walls.One | Walls.Three)
-wallMap.setUint8(44, Walls.One | Walls.Three)
-wallMap.setUint8(48, Walls.Zero | Walls.One | Walls.Three)
-wallMap.setUint8(52, Walls.One | Walls.Two | Walls.Four)
+wallMap.setUint8(2, Walls.Y0)
+wallMap.setUint8(4, Walls.Y4)
+wallMap.setUint8(7, Walls.Y2 | Walls.Y3)
+wallMap.setUint8(11, Walls.Y0 | Walls.Y3 | Walls.Y4)
+wallMap.setUint8(13, Walls.Y2)
+wallMap.setUint8(16, Walls.Y0 | Walls.Y1 | Walls.Y2)
+wallMap.setUint8(20, Walls.Y2 | Walls.Y3 | Walls.Y4)
+wallMap.setUint8(23, Walls.Y1 | Walls.Y3)
+wallMap.setUint8(27, Walls.Y1)
+wallMap.setUint8(28, Walls.Y4)
+wallMap.setUint8(29, Walls.Y0)
+wallMap.setUint8(30, Walls.Y2)
+wallMap.setUint8(33, Walls.All ^ Walls.Y3)
+wallMap.setUint8(37, Walls.Y1 | Walls.Y2 | Walls.Y3)
+wallMap.setUint8(40, Walls.Y0 | Walls.Y4)
+wallMap.setUint8(42, Walls.Y1 | Walls.Y3)
+wallMap.setUint8(44, Walls.Y1 | Walls.Y3)
+wallMap.setUint8(48, Walls.Y0 | Walls.Y1 | Walls.Y3)
+wallMap.setUint8(52, Walls.Y1 | Walls.Y2 | Walls.Y4)
 
-wallMap.setUint8(54, Walls.Zero)
-wallMap.setUint8(56, Walls.Four)
-wallMap.setUint8(59, Walls.Two | Walls.Three)
-wallMap.setUint8(63, Walls.Zero | Walls.Three | Walls.Four)
-wallMap.setUint8(65, Walls.Two)
-wallMap.setUint8(68, Walls.Zero | Walls.One | Walls.Two)
-wallMap.setUint8(72, Walls.Two | Walls.Three | Walls.Four)
-wallMap.setUint8(75, Walls.One | Walls.Three)
-wallMap.setUint8(79, Walls.One)
-wallMap.setUint8(80, Walls.Four)
-wallMap.setUint8(81, Walls.Zero)
-wallMap.setUint8(82, Walls.Two)
-wallMap.setUint8(85, Walls.All ^ Walls.Three)
-wallMap.setUint8(89, Walls.One | Walls.Two | Walls.Three)
-wallMap.setUint8(92, Walls.Zero | Walls.Four)
-wallMap.setUint8(94, Walls.One | Walls.Three)
-wallMap.setUint8(96, Walls.One | Walls.Three)
-wallMap.setUint8(100, Walls.Zero | Walls.One | Walls.Three)
-wallMap.setUint8(104, Walls.One | Walls.Two | Walls.Four)
+wallMap.setUint8(54, Walls.Y0)
+wallMap.setUint8(56, Walls.Y4)
+wallMap.setUint8(59, Walls.Y2 | Walls.Y3)
+wallMap.setUint8(63, Walls.Y0 | Walls.Y3 | Walls.Y4)
+wallMap.setUint8(65, Walls.Y2)
+wallMap.setUint8(68, Walls.Y0 | Walls.Y1 | Walls.Y2)
+wallMap.setUint8(72, Walls.Y2 | Walls.Y3 | Walls.Y4)
+wallMap.setUint8(75, Walls.Y1 | Walls.Y3)
+wallMap.setUint8(79, Walls.Y1)
+wallMap.setUint8(80, Walls.Y4)
+wallMap.setUint8(81, Walls.Y0)
+wallMap.setUint8(82, Walls.Y2)
+wallMap.setUint8(85, Walls.All ^ Walls.Y3)
+wallMap.setUint8(89, Walls.Y1 | Walls.Y2 | Walls.Y3)
+wallMap.setUint8(92, Walls.Y0 | Walls.Y4)
+wallMap.setUint8(94, Walls.Y1 | Walls.Y3)
+wallMap.setUint8(96, Walls.Y1 | Walls.Y3)
+wallMap.setUint8(100, Walls.Y0 | Walls.Y1 | Walls.Y3)
+wallMap.setUint8(104, Walls.Y1 | Walls.Y2 | Walls.Y4)
 
-wallMap.setUint8(107, Walls.Two | Walls.Three)
-wallMap.setUint8(111, Walls.Zero | Walls.One | Walls.Four)
-wallMap.setUint8(113, Walls.Four)
-wallMap.setUint8(115, Walls.Two)
-wallMap.setUint8(118, Walls.One | Walls.Two | Walls.Three)
-wallMap.setUint8(121, Walls.Zero)
-wallMap.setUint8(122, Walls.Four)
-wallMap.setUint8(124, Walls.One | Walls.Two)
-wallMap.setUint8(126, Walls.Three | Walls.Four)
+wallMap.setUint8(107, Walls.Y2 | Walls.Y3)
+wallMap.setUint8(111, Walls.Y0 | Walls.Y1 | Walls.Y4)
+wallMap.setUint8(113, Walls.Y4)
+wallMap.setUint8(115, Walls.Y2)
+wallMap.setUint8(118, Walls.Y1 | Walls.Y2 | Walls.Y3)
+wallMap.setUint8(121, Walls.Y0)
+wallMap.setUint8(122, Walls.Y4)
+wallMap.setUint8(124, Walls.Y1 | Walls.Y2)
+wallMap.setUint8(126, Walls.Y3 | Walls.Y4)
 
 input.setAccelerometerRange(AcceleratorRange.OneG)
 music.setBuiltInSpeakerEnabled(true)
@@ -179,11 +179,11 @@ basic.forever(() => {
 })
 
 function displayWalls(xOffset: number, wallColumn: Walls): void {
-    ;(wallColumn & Walls.Zero) === Walls.Zero && led.plot(xOffset, 0)
-    ;(wallColumn & Walls.One) === Walls.One && led.plot(xOffset, 1)
-    ;(wallColumn & Walls.Two) === Walls.Two && led.plot(xOffset, 2)
-    ;(wallColumn & Walls.Three) === Walls.Three && led.plot(xOffset, 3)
-    ;(wallColumn & Walls.Four) === Walls.Four && led.plot(xOffset, 4)
+    ;(wallColumn & Walls.Y0) === Walls.Y0 && led.plot(xOffset, 0)
+    ;(wallColumn & Walls.Y1) === Walls.Y1 && led.plot(xOffset, 1)
+    ;(wallColumn & Walls.Y2) === Walls.Y2 && led.plot(xOffset, 2)
+    ;(wallColumn & Walls.Y3) === Walls.Y3 && led.plot(xOffset, 3)
+    ;(wallColumn & Walls.Y4) === Walls.Y4 && led.plot(xOffset, 4)
 }
 
 input.onButtonPressed(Button.B, () => {
