@@ -11,7 +11,8 @@ enum Walls {
 const MIN_ACCELERATION: number = -1023.0
 const MAX_ACCELERATION: number = 1023.0
 
-const pointSound = new music.StringArrayPlayable(["E5"], 200)
+// D5, 1/8 note at 125 BPM
+const pointSound = new music.TonePlayable(587.3295, 240)
 const endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
 // byteWidth = 4; length = 20
 const accelerationHistory: Buffer = pins.createBuffer(80)
