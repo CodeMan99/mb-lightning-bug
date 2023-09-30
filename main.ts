@@ -175,7 +175,7 @@ basic.forever(() => {
     // 1000 / 8 = roughly 125 frames per second
     // 125 / 20 = new history 6.25 times per second
     // 1000 / 6.25 = roughly 160 milliseconds per move
-    // 160 * 4 = roughly 640 milliseconds to "fall" from top to bottom
+    // 160 * 4 = roughly 640 milliseconds to move from left edge to right edge
     basic.pause(8)
 })
 
