@@ -179,12 +179,12 @@ basic.forever(() => {
     basic.pause(8)
 })
 
-function displayWalls(yOffset: number, wallColumn: Walls): void {
-    ;(wallColumn & Walls.X0) === Walls.X0 && led.plot(0, yOffset)
-    ;(wallColumn & Walls.X1) === Walls.X1 && led.plot(1, yOffset)
-    ;(wallColumn & Walls.X2) === Walls.X2 && led.plot(2, yOffset)
-    ;(wallColumn & Walls.X3) === Walls.X3 && led.plot(3, yOffset)
-    ;(wallColumn & Walls.X4) === Walls.X4 && led.plot(4, yOffset)
+function displayWalls(yOffset: number, wallRow: Walls): void {
+    ;(wallRow & Walls.X0) === Walls.X0 && led.plot(0, yOffset)
+    ;(wallRow & Walls.X1) === Walls.X1 && led.plot(1, yOffset)
+    ;(wallRow & Walls.X2) === Walls.X2 && led.plot(2, yOffset)
+    ;(wallRow & Walls.X3) === Walls.X3 && led.plot(3, yOffset)
+    ;(wallRow & Walls.X4) === Walls.X4 && led.plot(4, yOffset)
 }
 
 input.onButtonPressed(Button.B, () => {
