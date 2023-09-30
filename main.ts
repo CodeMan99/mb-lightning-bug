@@ -1,10 +1,10 @@
 enum Walls {
     None = 0b00000,
-    Y0   = 0b00001,
-    Y1   = 0b00010,
-    Y2   = 0b00100,
-    Y3   = 0b01000,
-    Y4   = 0b10000,
+    X0   = 0b00001,
+    X1   = 0b00010,
+    X2   = 0b00100,
+    X3   = 0b01000,
+    X4   = 0b10000,
     All  = 0b11111,
 }
 
@@ -17,7 +17,7 @@ const endGameSound = music.builtInPlayableMelody(Melodies.Wawawawaa)
 // byteWidth = 4; length = 20
 const accelerationHistory: Buffer = pins.createBuffer(80)
 const wallMap: Buffer = pins.createBuffer(128)
-const startY: number = input.acceleration(Dimension.Y)
+const startX: number = input.acceleration(Dimension.X)
 
 let isGameOver: boolean = false
 let showHighScore: boolean = false
@@ -35,67 +35,67 @@ function resetGame() {
 }
 
 for (let i = 0; i < 80; i += 4) {
-    accelerationHistory.setNumber(NumberFormat.Int32LE, i, startY)
+    accelerationHistory.setNumber(NumberFormat.Int32LE, i, startX)
 }
 
-wallMap.setUint8(2, Walls.Y0)
-wallMap.setUint8(4, Walls.Y4)
-wallMap.setUint8(7, Walls.Y2 | Walls.Y3)
-wallMap.setUint8(11, Walls.Y0 | Walls.Y3 | Walls.Y4)
-wallMap.setUint8(13, Walls.Y2)
-wallMap.setUint8(16, Walls.Y0 | Walls.Y1 | Walls.Y2)
-wallMap.setUint8(20, Walls.Y2 | Walls.Y3 | Walls.Y4)
-wallMap.setUint8(23, Walls.Y1 | Walls.Y3)
-wallMap.setUint8(27, Walls.Y1)
-wallMap.setUint8(28, Walls.Y4)
-wallMap.setUint8(29, Walls.Y0)
-wallMap.setUint8(30, Walls.Y2)
-wallMap.setUint8(33, Walls.All ^ Walls.Y3)
-wallMap.setUint8(37, Walls.Y1 | Walls.Y2 | Walls.Y3)
-wallMap.setUint8(40, Walls.Y0 | Walls.Y4)
-wallMap.setUint8(42, Walls.Y1 | Walls.Y3)
-wallMap.setUint8(44, Walls.Y1 | Walls.Y3)
-wallMap.setUint8(48, Walls.Y0 | Walls.Y1 | Walls.Y3)
-wallMap.setUint8(52, Walls.Y1 | Walls.Y2 | Walls.Y4)
+wallMap.setUint8(2, Walls.X0)
+wallMap.setUint8(4, Walls.X4)
+wallMap.setUint8(7, Walls.X2 | Walls.X3)
+wallMap.setUint8(11, Walls.X0 | Walls.X3 | Walls.X4)
+wallMap.setUint8(13, Walls.X2)
+wallMap.setUint8(16, Walls.X0 | Walls.X1 | Walls.X2)
+wallMap.setUint8(20, Walls.X2 | Walls.X3 | Walls.X4)
+wallMap.setUint8(23, Walls.X1 | Walls.X3)
+wallMap.setUint8(27, Walls.X1)
+wallMap.setUint8(28, Walls.X4)
+wallMap.setUint8(29, Walls.X0)
+wallMap.setUint8(30, Walls.X2)
+wallMap.setUint8(33, Walls.All ^ Walls.X3)
+wallMap.setUint8(37, Walls.X1 | Walls.X2 | Walls.X3)
+wallMap.setUint8(40, Walls.X0 | Walls.X4)
+wallMap.setUint8(42, Walls.X1 | Walls.X3)
+wallMap.setUint8(44, Walls.X1 | Walls.X3)
+wallMap.setUint8(48, Walls.X0 | Walls.X1 | Walls.X3)
+wallMap.setUint8(52, Walls.X1 | Walls.X2 | Walls.X4)
 
-wallMap.setUint8(54, Walls.Y0)
-wallMap.setUint8(56, Walls.Y4)
-wallMap.setUint8(59, Walls.Y2 | Walls.Y3)
-wallMap.setUint8(63, Walls.Y0 | Walls.Y3 | Walls.Y4)
-wallMap.setUint8(65, Walls.Y2)
-wallMap.setUint8(68, Walls.Y0 | Walls.Y1 | Walls.Y2)
-wallMap.setUint8(72, Walls.Y2 | Walls.Y3 | Walls.Y4)
-wallMap.setUint8(75, Walls.Y1 | Walls.Y3)
-wallMap.setUint8(79, Walls.Y1)
-wallMap.setUint8(80, Walls.Y4)
-wallMap.setUint8(81, Walls.Y0)
-wallMap.setUint8(82, Walls.Y2)
-wallMap.setUint8(85, Walls.All ^ Walls.Y3)
-wallMap.setUint8(89, Walls.Y1 | Walls.Y2 | Walls.Y3)
-wallMap.setUint8(92, Walls.Y0 | Walls.Y4)
-wallMap.setUint8(94, Walls.Y1 | Walls.Y3)
-wallMap.setUint8(96, Walls.Y1 | Walls.Y3)
-wallMap.setUint8(100, Walls.Y0 | Walls.Y1 | Walls.Y3)
-wallMap.setUint8(104, Walls.Y1 | Walls.Y2 | Walls.Y4)
+wallMap.setUint8(54, Walls.X0)
+wallMap.setUint8(56, Walls.X4)
+wallMap.setUint8(59, Walls.X2 | Walls.X3)
+wallMap.setUint8(63, Walls.X0 | Walls.X3 | Walls.X4)
+wallMap.setUint8(65, Walls.X2)
+wallMap.setUint8(68, Walls.X0 | Walls.X1 | Walls.X2)
+wallMap.setUint8(72, Walls.X2 | Walls.X3 | Walls.X4)
+wallMap.setUint8(75, Walls.X1 | Walls.X3)
+wallMap.setUint8(79, Walls.X1)
+wallMap.setUint8(80, Walls.X4)
+wallMap.setUint8(81, Walls.X0)
+wallMap.setUint8(82, Walls.X2)
+wallMap.setUint8(85, Walls.All ^ Walls.X3)
+wallMap.setUint8(89, Walls.X1 | Walls.X2 | Walls.X3)
+wallMap.setUint8(92, Walls.X0 | Walls.X4)
+wallMap.setUint8(94, Walls.X1 | Walls.X3)
+wallMap.setUint8(96, Walls.X1 | Walls.X3)
+wallMap.setUint8(100, Walls.X0 | Walls.X1 | Walls.X3)
+wallMap.setUint8(104, Walls.X1 | Walls.X2 | Walls.X4)
 
-wallMap.setUint8(107, Walls.Y2 | Walls.Y3)
-wallMap.setUint8(111, Walls.Y0 | Walls.Y1 | Walls.Y4)
-wallMap.setUint8(113, Walls.Y4)
-wallMap.setUint8(115, Walls.Y2)
-wallMap.setUint8(118, Walls.Y1 | Walls.Y2 | Walls.Y3)
-wallMap.setUint8(121, Walls.Y0)
-wallMap.setUint8(122, Walls.Y4)
-wallMap.setUint8(124, Walls.Y1 | Walls.Y2)
-wallMap.setUint8(126, Walls.Y3 | Walls.Y4)
+wallMap.setUint8(107, Walls.X2 | Walls.X3)
+wallMap.setUint8(111, Walls.X0 | Walls.X1 | Walls.X4)
+wallMap.setUint8(113, Walls.X4)
+wallMap.setUint8(115, Walls.X2)
+wallMap.setUint8(118, Walls.X1 | Walls.X2 | Walls.X3)
+wallMap.setUint8(121, Walls.X0)
+wallMap.setUint8(122, Walls.X4)
+wallMap.setUint8(124, Walls.X1 | Walls.X2)
+wallMap.setUint8(126, Walls.X3 | Walls.X4)
 
 input.setAccelerometerRange(AcceleratorRange.OneG)
 music.setBuiltInSpeakerEnabled(true)
 
 basic.forever(() => {
-    const vertical: number = input.acceleration(Dimension.Y)
+    const horizonal: number = input.acceleration(Dimension.X)
 
     accelerationHistory.shift(4)
-    accelerationHistory.setNumber(NumberFormat.Int32LE, 76, vertical)
+    accelerationHistory.setNumber(NumberFormat.Int32LE, 76, horizonal)
 
     const sum: number =
         accelerationHistory.getNumber(NumberFormat.Int32LE,  0) +
@@ -117,21 +117,21 @@ basic.forever(() => {
         accelerationHistory.getNumber(NumberFormat.Int32LE, 64) +
         accelerationHistory.getNumber(NumberFormat.Int32LE, 68) +
         accelerationHistory.getNumber(NumberFormat.Int32LE, 72) +
-        vertical
+        horizonal
 
     const averageAcceration: number = Math.constrain(sum * 0.05, MIN_ACCELERATION, MAX_ACCELERATION)
-    const ledY: number = Math.round(Math.map(averageAcceration, MIN_ACCELERATION, MAX_ACCELERATION, -0.5, 4.49))
-    const collisionY: number = Math.pow(2, ledY)
+    const ledX: number = Math.round(Math.map(averageAcceration, MIN_ACCELERATION, MAX_ACCELERATION, -0.5, 4.49))
+    const collisionX: number = Math.pow(2, ledX)
     // advance the map once every twelve frames
-    const xMapOffsetStart: number = Math.floor(mapTickCount / 12)
-    const currentWall: number = wallMap.getUint8(xMapOffsetStart)
+    const yMapOffsetStart: number = Math.floor(mapTickCount / 12)
+    const currentWall: number = wallMap.getUint8(yMapOffsetStart)
     const currentWallFrame: number = mapTickCount % 12
     // Allow mistakes! Ignore collision if the first or last frame of the currentWall.
     const gameOver: boolean =
         isGameOver || (
             0 < currentWallFrame &&
             currentWallFrame < 11 &&
-            (currentWall & collisionY) > 0
+            (currentWall & collisionX) > 0
         )
 
     if (currentWall !== Walls.None && currentWallFrame === 11) {
@@ -161,12 +161,12 @@ basic.forever(() => {
             resetGame()
         }
     } else {
-        displayWalls(0, currentWall)
-        displayWalls(1, wallMap.getUint8(xMapOffsetStart + 1))
-        displayWalls(2, wallMap.getUint8(xMapOffsetStart + 2))
-        displayWalls(3, wallMap.getUint8(xMapOffsetStart + 3))
-        displayWalls(4, wallMap.getUint8(xMapOffsetStart + 4))
-        led.plot(0, ledY)
+        displayWalls(0, wallMap.getUint8(yMapOffsetStart + 4))
+        displayWalls(1, wallMap.getUint8(yMapOffsetStart + 3))
+        displayWalls(2, wallMap.getUint8(yMapOffsetStart + 2))
+        displayWalls(3, wallMap.getUint8(yMapOffsetStart + 1))
+        displayWalls(4, currentWall)
+        led.plot(ledX, 4)
 
         // 128 (wallMap.length) * 12 = 1536
         mapTickCount = (mapTickCount + 1) % 1536
@@ -179,12 +179,12 @@ basic.forever(() => {
     basic.pause(8)
 })
 
-function displayWalls(xOffset: number, wallColumn: Walls): void {
-    ;(wallColumn & Walls.Y0) === Walls.Y0 && led.plot(xOffset, 0)
-    ;(wallColumn & Walls.Y1) === Walls.Y1 && led.plot(xOffset, 1)
-    ;(wallColumn & Walls.Y2) === Walls.Y2 && led.plot(xOffset, 2)
-    ;(wallColumn & Walls.Y3) === Walls.Y3 && led.plot(xOffset, 3)
-    ;(wallColumn & Walls.Y4) === Walls.Y4 && led.plot(xOffset, 4)
+function displayWalls(yOffset: number, wallColumn: Walls): void {
+    ;(wallColumn & Walls.X0) === Walls.X0 && led.plot(0, yOffset)
+    ;(wallColumn & Walls.X1) === Walls.X1 && led.plot(1, yOffset)
+    ;(wallColumn & Walls.X2) === Walls.X2 && led.plot(2, yOffset)
+    ;(wallColumn & Walls.X3) === Walls.X3 && led.plot(3, yOffset)
+    ;(wallColumn & Walls.X4) === Walls.X4 && led.plot(4, yOffset)
 }
 
 input.onButtonPressed(Button.B, () => {
